@@ -10,24 +10,16 @@ using namespace llvm;
 //STATISTIC(HelloCounter, "Counts number of functions greeted");
 
 namespace {
-    struct OCFI : public ModulePass {
+    struct OCFI : public MachineFunctionPass {
         static char ID; // Pass identification, replacement for typeid
-        OCFI() : ModulePass(ID) {}
+        OCFI() : MachineFunctionPass(ID) {}
 
-        bool runOnModule(Module &M) override {
-            LLVMContext& c = M.getContext();
-            std::vector<BasicBlock *> bbls;
-            for (Function &f : M) {
-              for (BasicBlock &bbl : f) {
-                bbls.push_back(&bbl);
+        bool runOnMachineFunction(MachineFunction &F) override {
+            //LLVMContext& c = M.getContext();
+              for (MachineBasicBlock &bbl : F) {
+                bbl.setLabelMustBeEmitted();
               }
-            }
-            M.getOrInsertFunction("__ocfi_blocks", FunctionType::get(Type::getVoidTy(c), ArrayRef<Type*>(), false));
-            Function* sto = M.getFunction("__ocfi_blocks");
-            for (BasicBlock *bbl : bbls) {
-                bbl->removeFromParent();
-                bbl->insertInto(sto);
-            }
+            
             return false;
         }
     };
