@@ -19,7 +19,7 @@ namespace {
             std::vector<BasicBlock *> bbls;
             for (Function &f : M) {
               for (BasicBlock &bbl : f) {
-                bbls.push_back(bbl);
+                bbls.push_back(&bbl);
               }
             }
             M.getOrInsertFunction("__ocfi_blocks", FunctionType::get(Type::getVoidTy(c), ArrayRef<Type*>(), false));
