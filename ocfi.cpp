@@ -15,14 +15,12 @@ namespace {
         OCFI() : ModulePass(ID) {}
 
         bool runOnModule(Module &M) override {
-            const LLVMContext& c = getContext();
-            vector<BasicBlock> bbls;
-            for (Function &f : M.begin()) {
-                for (BasicBlock& bbl : f.begin()) {
-                    bbls.push_back(bbl);
-                }
+            const LLVMContext& c = M.getContext();
+            std::vector<BasicBlock> bbls;
+            for (BasicBlock &bbl : M) {
+                bbls.push_back(bbl);
             }
-            M.getOrInsertFunction("__ocfi_blocks", FunctionType::get(Type.getVoidTy(c), ArrayRef<Type*>(), false));
+            M.getOrInsertFunction("__ocfi_blocks", FunctionType::get(Type::getVoidTy(c), ArrayRef<Type*>(), false));
             Function* sto = M.getFunction("__ocfi_blocks");
             for (BasicBlock& bbl : bbls) {
                 bbl.removeFromParent();
