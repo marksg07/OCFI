@@ -16,18 +16,18 @@ namespace {
 
         bool runOnModule(Module &M) override {
             LLVMContext& c = M.getContext();
-            llvm::simple_ilist<BasicBlock> bbls;
+            //llvm::simple_ilist<BasicBlock> bbls;
             for (Function &f : M) {
               for (BasicBlock &bbl : f) {
-                bbls.push_back(bbl);
+                //bbls.push_back(bbl);
               }
             }
             M.getOrInsertFunction("__ocfi_blocks", FunctionType::get(Type::getVoidTy(c), ArrayRef<Type*>(), false));
             Function* sto = M.getFunction("__ocfi_blocks");
-            for (BasicBlock &bbl : bbls) {
-                bbl.removeFromParent();
-                bbl.insertInto(sto);
-            }
+            //for (BasicBlock &bbl : bbls) {
+            //    bbl.removeFromParent();
+            //    bbl.insertInto(sto);
+            //}
             return false;
         }
     };
