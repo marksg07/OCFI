@@ -33,5 +33,6 @@ namespace {
     };
 }
 
+char OCFI::ID = 0;
 static RegisterPass<OCFI>
 Y("ocfi", "OCFI pass");
