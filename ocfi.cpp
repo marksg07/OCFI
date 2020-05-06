@@ -25,8 +25,8 @@ namespace {
             M.getOrInsertFunction("__ocfi_blocks", FunctionType::get(Type::getVoidTy(c), ArrayRef<Type*>(), false));
             Function* sto = M.getFunction("__ocfi_blocks");
             for (BasicBlock &bbl : bbls) {
-                bbl->removeFromParent();
-                bbl->insertInto(sto);
+                bbl.removeFromParent();
+                bbl.insertInto(sto);
             }
             return false;
         }
