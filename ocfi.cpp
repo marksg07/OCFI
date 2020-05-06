@@ -16,7 +16,7 @@ namespace {
 
         bool runOnModule(Module &M) override {
             LLVMContext& c = M.getContext();
-            std::vector<BasicBlock> bbls;
+            std::vector<BasicBlock *> bbls;
             for (Function &f : M) {
               for (BasicBlock &bbl : f) {
                 bbls.push_back(bbl);
@@ -24,9 +24,9 @@ namespace {
             }
             M.getOrInsertFunction("__ocfi_blocks", FunctionType::get(Type::getVoidTy(c), ArrayRef<Type*>(), false));
             Function* sto = M.getFunction("__ocfi_blocks");
-            for (BasicBlock& bbl : bbls) {
-                bbl.removeFromParent();
-                bbl.insertInto(sto);
+            for (BasicBlock *bbl : bbls) {
+                bbl->removeFromParent();
+                bbl->insertInto(sto);
             }
             return false;
         }
